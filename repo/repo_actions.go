@@ -3,7 +3,7 @@ package repo
 import (
 	"fmt"
 	"github.com/codegangsta/cli"
-	"github.com/ghub/client"
+	"github.com/ghub/gh"
 	"github.com/ghub/util"
 	"log"
 )
@@ -13,9 +13,7 @@ func getRepo(c *cli.Context) {
 		log.Fatal("Usage: ghub org/repo")
 	}
 	o, r := util.SplitOrgRepoName(c.Args().Get(0))
-	gh := client.GitHub()
-
-	repo, resp, err := gh.Repositories.Get(o, r)
+	repo, resp, err := gh.Client.Repositories.Get(o, r)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,13 +1,21 @@
-package client
+package gh
 
 import (
 	"fmt"
 	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
+	"net/http"
 	"os"
 )
 
-func GitHub() *github.Client {
+var Client *github.Client
+
+func Init() {
+	token := getToken()
+	Client = gitHub(token)
+}
+
+func getToken() *http.Client {
 	token := os.Getenv("GITHUB_TOKEN")
 	if len(token) == 0 {
 		fmt.Fprintln(os.Stderr, "[ghub] You must set the GITHUB_TOKEN environment variable.")
@@ -18,7 +26,10 @@ func GitHub() *github.Client {
 	)
 	tc := oauth2.NewClient(oauth2.NoContext, ts)
 
-	client := github.NewClient(tc)
+	return tc
+}
 
+func gitHub(tc *http.Client) *github.Client {
+	client := github.NewClient(tc)
 	return client
 }

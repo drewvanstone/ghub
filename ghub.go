@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/codegangsta/cli"
+	"github.com/ghub/gh"
 	"github.com/ghub/issue"
 	"github.com/ghub/org"
 	"github.com/ghub/pr"
@@ -12,6 +13,8 @@ import (
 )
 
 func main() {
+
+	gh.Init()
 
 	ghub := cli.NewApp()
 	ghub.Name = "Ghub"
