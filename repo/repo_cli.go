@@ -26,6 +26,7 @@ var Get cli.Command = cli.Command{
 	Usage: "ghub repo [org]/[repo]",
 	Subcommands: []cli.Command{
 		GetRepoIssuesCmd,
+		GetRepoPullRequestsCmd,
 	},
 	Action: func(c *cli.Context) {
 		util.CheckCommandArgs(1, c)
@@ -47,5 +48,14 @@ var GetRepoIssuesCmd cli.Command = cli.Command{
 	Action: func(c *cli.Context) {
 		util.CheckCommandArgs(1, c)
 		getRepoIssues(c)
+	},
+}
+
+var GetRepoPullRequestsCmd cli.Command = cli.Command{
+	Name:  "prs",
+	Usage: "Get all pull requests of a repo",
+	Action: func(c *cli.Context) {
+		util.CheckCommandArgs(1, c)
+		getRepoPullRequests(c)
 	},
 }
