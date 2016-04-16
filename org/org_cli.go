@@ -28,6 +28,7 @@ var Get cli.Command = cli.Command{
 		GetOrgTeamsCmd,
 		GetOrgMembersCmd,
 		GetOrgHooksCmd,
+		GetOrgIssuesCmd,
 	},
 	Action: func(c *cli.Context) {
 		util.CheckCommandArgs(1, c)
@@ -77,5 +78,14 @@ var GetOrgHooksCmd cli.Command = cli.Command{
 	Action: func(c *cli.Context) {
 		util.CheckCommandArgs(1, c)
 		getOrgHooks(c)
+	},
+}
+
+var GetOrgIssuesCmd cli.Command = cli.Command{
+	Name:  "issues",
+	Usage: "Get all issues of an organization",
+	Action: func(c *cli.Context) {
+		util.CheckCommandArgs(1, c)
+		getOrgIssues(c)
 	},
 }
