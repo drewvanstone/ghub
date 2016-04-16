@@ -1,6 +1,7 @@
 package util
 
 import (
+	"errors"
 	"github.com/codegangsta/cli"
 	"log"
 	"os"
@@ -22,10 +23,12 @@ func CheckCommandArgs(minArgs int, c *cli.Context) {
 	}
 }
 
-func SplitOrgRepoName(orgrepo string) (string, string) {
+func SplitOrgRepoName(orgrepo string) (string, string, error) {
 	parts := strings.Split(orgrepo, "/")
 	if len(parts) != 2 {
-		println("Repository must be in the form: org/reponame (ie. drewvanstone/ghub), got ", orgrepo)
+		return "", "", errors.New("Failed to split org/repo")
+		os.Exit(1)
+		//log.Fatal("Repository must be in the form: org/reponame (ie. drewvanstone/ghub), got ", orgrepo)
 	}
-	return parts[0], parts[1]
+	return parts[0], parts[1], nil
 }

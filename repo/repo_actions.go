@@ -10,10 +10,10 @@ import (
 )
 
 func getRepo(c *cli.Context) {
-	if len(c.Args()) < 1 {
-		log.Fatal("Usage: ghub org/repo")
+	o, r, err := util.SplitOrgRepoName(c.Args().Get(0))
+	if err != nil {
+		log.Fatal(err)
 	}
-	o, r := util.SplitOrgRepoName(c.Args().Get(0))
 	repo, _, err := gh.Client.Repositories.Get(o, r)
 	if err != nil {
 		log.Fatal(err)
@@ -23,15 +23,13 @@ func getRepo(c *cli.Context) {
 }
 
 func getRepoIssues(c *cli.Context) {
-	if len(c.Args()) < 1 {
-		log.Fatal("Usage: ghub owner/repo")
+	owner, repo, err := util.SplitOrgRepoName(c.Args().Get(0))
+	if err != nil {
+		log.Fatal(err)
 	}
-	owner, repo := util.SplitOrgRepoName(c.Args().Get(0))
-
 	opts := &github.IssueListByRepoOptions{
 		ListOptions: github.ListOptions{PerPage: 30},
 	}
-
 	issues, _, err := gh.Client.Issues.ListByRepo(owner, repo, opts)
 	if err != nil {
 		fmt.Println(err)
@@ -44,15 +42,13 @@ func getRepoIssues(c *cli.Context) {
 }
 
 func getRepoPullRequests(c *cli.Context) {
-	if len(c.Args()) < 1 {
-		log.Fatal("Usage: ghub owner/repo")
+	owner, repo, err := util.SplitOrgRepoName(c.Args().Get(0))
+	if err != nil {
+		log.Fatal(err)
 	}
-	owner, repo := util.SplitOrgRepoName(c.Args().Get(0))
-
 	opts := &github.PullRequestListOptions{
 		ListOptions: github.ListOptions{PerPage: 30},
 	}
-
 	prs, _, err := gh.Client.PullRequests.List(owner, repo, opts)
 	if err != nil {
 		fmt.Println(err)
