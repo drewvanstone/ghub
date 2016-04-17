@@ -73,3 +73,20 @@ func getOrgHooks(c *cli.Context) {
 
 	util.PrintJson(hooks)
 }
+
+func getOrgIssues(c *cli.Context) {
+	org := c.Args().First()
+	opts := &github.IssueListOptions{
+		ListOptions: github.ListOptions{PerPage: 30},
+	}
+
+	issues, _, err := gh.Client.Issues.ListByOrg(org, opts)
+	if err != nil {
+		fmt.Println(err)
+	}
+	if len(issues) == 0 {
+		fmt.Println("No issues found")
+	}
+
+	util.PrintJson(issues)
+}

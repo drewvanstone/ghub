@@ -2,6 +2,7 @@ package issue
 
 import (
 	"github.com/codegangsta/cli"
+	"github.com/ghub/util"
 )
 
 var Create cli.Command = cli.Command{
@@ -24,7 +25,8 @@ var Get cli.Command = cli.Command{
 	Name:  "issue",
 	Usage: "Get an issue (NOT IMPLEMENTED)",
 	Action: func(c *cli.Context) {
-		println("Got issue")
+		util.CheckCommandArgs(1, c)
+		getIssue(c)
 	},
 }
 

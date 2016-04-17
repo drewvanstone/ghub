@@ -2,6 +2,7 @@ package repo
 
 import (
 	"github.com/codegangsta/cli"
+	"github.com/ghub/util"
 )
 
 var Create cli.Command = cli.Command{
@@ -23,7 +24,12 @@ var Delete cli.Command = cli.Command{
 var Get cli.Command = cli.Command{
 	Name:  "repo",
 	Usage: "ghub repo [org]/[repo]",
+	Subcommands: []cli.Command{
+		GetRepoIssuesCmd,
+		GetRepoPullRequestsCmd,
+	},
 	Action: func(c *cli.Context) {
+		util.CheckCommandArgs(1, c)
 		getRepo(c)
 	},
 }
@@ -33,5 +39,23 @@ var Update cli.Command = cli.Command{
 	Usage: "Update a repo (NOT IMPLEMENTED)",
 	Action: func(c *cli.Context) {
 		println("repo updated")
+	},
+}
+
+var GetRepoIssuesCmd cli.Command = cli.Command{
+	Name:  "issues",
+	Usage: "Get all issues of a repo",
+	Action: func(c *cli.Context) {
+		util.CheckCommandArgs(1, c)
+		getRepoIssues(c)
+	},
+}
+
+var GetRepoPullRequestsCmd cli.Command = cli.Command{
+	Name:  "prs",
+	Usage: "Get all pull requests of a repo",
+	Action: func(c *cli.Context) {
+		util.CheckCommandArgs(1, c)
+		getRepoPullRequests(c)
 	},
 }

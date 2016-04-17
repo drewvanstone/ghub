@@ -5,23 +5,64 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/ghub/gh"
 	"github.com/ghub/util"
+	"github.com/google/go-github/github"
 	"log"
 )
 
 func getRepo(c *cli.Context) {
-	if len(c.Args()) < 1 {
-		log.Fatal("Usage: ghub org/repo")
+	o, r, err := util.SplitOrgRepoName(c.Args().Get(0))
+	if err != nil {
+		log.Fatal(err)
 	}
-	o, r := util.SplitOrgRepoName(c.Args().Get(0))
-	repo, resp, err := gh.Client.Repositories.Get(o, r)
+	repo, _, err := gh.Client.Repositories.Get(o, r)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	if resp != nil {
-		util.PrintJson(*repo)
-		fmt.Println(*resp)
-	} else {
-		fmt.Println("ERROR: Nil response")
+	util.PrintJson(*repo)
+}
+
+func getRepoIssues(c *cli.Context) {
+	owner, repo, err := util.SplitOrgRepoName(c.Args().Get(0))
+	if err != nil {
+		log.Fatal(err)
 	}
+	opts := &github.IssueListByRepoOptions{
+		ListOptions: github.ListOptions{PerPage: 30},
+	}
+	issues, _, err := gh.Client.Issues.ListByRepo(owner, repo, opts)
+	if err != nil {
+		fmt.Println(err)
+	}
+	if len(issues) == 0 {
+		fmt.Println("No issues found")
+	}
+
+	// PRs are considered issues. Remove all PRs from issue array.
+	for index, issue := range issues {
+		if issue.PullRequestLinks != nil {
+			issues = append(issues[:index], issues[index+1:]...)
+		}
+	}
+
+	util.PrintJson(issues)
+}
+
+func getRepoPullRequests(c *cli.Context) {
+	owner, repo, err := util.SplitOrgRepoName(c.Args().Get(0))
+	if err != nil {
+		log.Fatal(err)
+	}
+	opts := &github.PullRequestListOptions{
+		ListOptions: github.ListOptions{PerPage: 30},
+	}
+	prs, _, err := gh.Client.PullRequests.List(owner, repo, opts)
+	if err != nil {
+		fmt.Println(err)
+	}
+	if len(prs) == 0 {
+		fmt.Println("No PRs found")
+	}
+
+	util.PrintJson(prs)
 }
