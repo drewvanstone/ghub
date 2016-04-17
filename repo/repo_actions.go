@@ -38,6 +38,13 @@ func getRepoIssues(c *cli.Context) {
 		fmt.Println("No issues found")
 	}
 
+	// PRs are considered issues. Remove all PRs from issue array.
+	for index, issue := range issues {
+		if issue.PullRequestLinks != nil {
+			issues = append(issues[:index], issues[index+1:]...)
+		}
+	}
+
 	util.PrintJson(issues)
 }
 
