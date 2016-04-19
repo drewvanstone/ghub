@@ -23,7 +23,7 @@ var Delete cli.Command = cli.Command{
 
 var Get cli.Command = cli.Command{
 	Name:  "issue",
-	Usage: "Get an issue (NOT IMPLEMENTED)",
+	Usage: "This is the usage",
 	Action: func(c *cli.Context) {
 		util.CheckCommandArgs(1, c)
 		getIssue(c)

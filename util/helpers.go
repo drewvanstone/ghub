@@ -14,6 +14,18 @@ func Check(err error) {
 	}
 }
 
+//func Autocomplete(commands []string, c *cli.Context) func(*cli.Context) {
+//	// This will complete if no args are passed
+//	return func(*cli.Context) {
+//		if c.NArg() > 0 {
+//			return
+//		}
+//		for _, c := range commands {
+//			fmt.Println(c)
+//		}
+//	}
+//}
+
 // Helper function to check that there are at least as many
 // arguments as required, and if not, display subcommand help.
 func CheckCommandArgs(minArgs int, c *cli.Context) {

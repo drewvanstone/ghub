@@ -8,7 +8,6 @@ import (
 	"github.com/google/go-github/github"
 )
 
-// Return a single github.Organization struct
 func getOrg(c *cli.Context) {
 	org := c.Args().First()
 	organization, _, err := gh.Client.Organizations.Get(org)

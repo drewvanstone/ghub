@@ -2,6 +2,7 @@ package team
 
 import (
 	"github.com/codegangsta/cli"
+	"github.com/ghub/util"
 )
 
 var Create cli.Command = cli.Command{
@@ -24,7 +25,9 @@ var Get cli.Command = cli.Command{
 	Name:  "team",
 	Usage: "Get a team (NOT IMPLEMENTED)",
 	Action: func(c *cli.Context) {
-		println("Got team")
+		getTeam(c)
+		util.CheckCommandArgs(1, c)
+		getTeam(c)
 	},
 }
 

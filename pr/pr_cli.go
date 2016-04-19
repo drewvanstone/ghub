@@ -2,6 +2,7 @@ package pr
 
 import (
 	"github.com/codegangsta/cli"
+	"github.com/ghub/util"
 )
 
 var Create cli.Command = cli.Command{
@@ -22,9 +23,10 @@ var Delete cli.Command = cli.Command{
 
 var Get cli.Command = cli.Command{
 	Name:  "pr",
-	Usage: "Get a pr (NOT IMPLEMENTED)",
+	Usage: "Get a pr",
 	Action: func(c *cli.Context) {
-		println("Got pr")
+		util.CheckCommandArgs(1, c)
+		getPr(c)
 	},
 }
 

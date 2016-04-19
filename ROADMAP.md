@@ -2,12 +2,11 @@
 
 ## GHUB GET
 - [x] `ghub get pr`
-- [ ] `ghub get org prs`
-- [ ] `ghub get repo prs`
-- [ ] `ghub get team`
-- [ ] `ghub get org teams`
+- [x] `ghub get repo prs`
+- [x] `ghub get team`
+- [x] `ghub get org teams`
 - [ ] `ghub get user`
-- [ ] `ghub get org users`
+- [x] `ghub get org users`
 
 ## GHUB CREATE
 - [ ] `ghub create issue`

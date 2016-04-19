@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/ghub/gh"
 	"github.com/ghub/issue"
@@ -9,6 +10,7 @@ import (
 	"github.com/ghub/repo"
 	"github.com/ghub/team"
 	"github.com/ghub/user"
+	//"github.com/ghub/util"
 	"os"
 )
 
@@ -16,11 +18,16 @@ func main() {
 
 	gh.Init()
 
+	// Autocomplete commands
+	//var topCommands = []string{"create", "delete", "get", "update"}
+	var getCommands = []string{"issue", "org", "pr", "repo", "team", "user"}
+
 	ghub := cli.NewApp()
 	ghub.Name = "Ghub"
 	ghub.Usage = "Command line utility for GitHub"
 	ghub.Email = "drewvanstone@gmail.com"
 	ghub.Author = "Drew Flower"
+	ghub.EnableBashCompletion = true
 	ghub.Commands = []cli.Command{
 		{
 			Name:  "create",
@@ -56,6 +63,14 @@ func main() {
 				repo.Get,
 				team.Get,
 				user.Get,
+			},
+			BashComplete: func(c *cli.Context) {
+				if c.NArg() > 0 {
+					return
+				}
+				for _, c := range getCommands {
+					fmt.Println(c)
+				}
 			},
 		},
 		{
