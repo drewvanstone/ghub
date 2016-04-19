@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/ghub/gh"
 	"github.com/ghub/issue"
@@ -10,7 +10,7 @@ import (
 	"github.com/ghub/repo"
 	"github.com/ghub/team"
 	"github.com/ghub/user"
-	//"github.com/ghub/util"
+	"github.com/ghub/util"
 	"os"
 )
 
@@ -19,7 +19,6 @@ func main() {
 	gh.Init()
 
 	// Autocomplete commands
-	//var topCommands = []string{"create", "delete", "get", "update"}
 	var getCommands = []string{"issue", "org", "pr", "repo", "team", "user"}
 
 	ghub := cli.NewApp()
@@ -64,14 +63,7 @@ func main() {
 				team.Get,
 				user.Get,
 			},
-			BashComplete: func(c *cli.Context) {
-				if c.NArg() > 0 {
-					return
-				}
-				for _, c := range getCommands {
-					fmt.Println(c)
-				}
-			},
+			BashComplete: util.Autocomplete(getCommands),
 		},
 		{
 			Name:  "update",

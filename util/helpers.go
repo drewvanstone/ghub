@@ -2,6 +2,7 @@ package util
 
 import (
 	"errors"
+	"fmt"
 	"github.com/codegangsta/cli"
 	"log"
 	"os"
@@ -14,17 +15,26 @@ func Check(err error) {
 	}
 }
 
-//func Autocomplete(commands []string, c *cli.Context) func(*cli.Context) {
-//	// This will complete if no args are passed
-//	return func(*cli.Context) {
-//		if c.NArg() > 0 {
-//			return
-//		}
-//		for _, c := range commands {
-//			fmt.Println(c)
-//		}
-//	}
-//}
+func Autocomplete(commands []string) func(*cli.Context) {
+	// This will complete if no args are passed
+	return func(c *cli.Context) {
+		if c.NArg() > 0 {
+			return
+		}
+		for _, command := range commands {
+			fmt.Println(command)
+		}
+	}
+}
+
+func CheckAutocomplete(commands []string, c *cli.Context) {
+	if c.NArg() > 0 {
+		return
+	}
+	for _, command := range commands {
+		fmt.Println(command)
+	}
+}
 
 // Helper function to check that there are at least as many
 // arguments as required, and if not, display subcommand help.

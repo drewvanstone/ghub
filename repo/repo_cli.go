@@ -1,6 +1,7 @@
 package repo
 
 import (
+	//"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/ghub/util"
 )
@@ -21,6 +22,7 @@ var Delete cli.Command = cli.Command{
 	},
 }
 
+var getRepoCommands = []string{"issues", "prs"}
 var Get cli.Command = cli.Command{
 	Name:  "repo",
 	Usage: "ghub repo [org]/[repo]",
@@ -32,6 +34,7 @@ var Get cli.Command = cli.Command{
 		util.CheckCommandArgs(1, c)
 		getRepo(c)
 	},
+	BashComplete: util.Autocomplete(getRepoCommands),
 }
 
 var Update cli.Command = cli.Command{
