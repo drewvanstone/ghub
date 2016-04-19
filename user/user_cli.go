@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/codegangsta/cli"
+	"github.com/ghub/util"
 )
 
 var Create cli.Command = cli.Command{
@@ -22,9 +23,10 @@ var Delete cli.Command = cli.Command{
 
 var Get cli.Command = cli.Command{
 	Name:  "user",
-	Usage: "Get a user (NOT IMPLEMENTED)",
+	Usage: "Get a user",
 	Action: func(c *cli.Context) {
-		println("Got user")
+		util.CheckCommandArgs(1, c)
+		getUser(c)
 	},
 }
 

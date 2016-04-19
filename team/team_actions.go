@@ -10,8 +10,6 @@ import (
 
 func getTeam(c *cli.Context) {
 	teamNum, _ := strconv.Atoi(c.Args().First())
-	fmt.Println("Team Num: ", teamNum)
-
 	team, _, err := gh.Client.Organizations.GetTeam(teamNum)
 	if err != nil {
 		fmt.Println(err)

@@ -25,7 +25,6 @@ var Get cli.Command = cli.Command{
 	Name:  "team",
 	Usage: "Get a team (NOT IMPLEMENTED)",
 	Action: func(c *cli.Context) {
-		getTeam(c)
 		util.CheckCommandArgs(1, c)
 		getTeam(c)
 	},

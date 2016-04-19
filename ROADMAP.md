@@ -5,7 +5,7 @@
 - [x] `ghub get repo prs`
 - [x] `ghub get team`
 - [x] `ghub get org teams`
-- [ ] `ghub get user`
+- [x] `ghub get user`
 - [x] `ghub get org users`
 
 ## GHUB CREATE
