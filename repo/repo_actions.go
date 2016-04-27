@@ -3,10 +3,13 @@ package repo
 import (
 	"fmt"
 	"github.com/codegangsta/cli"
+	"github.com/fatih/structs"
 	"github.com/ghub/gh"
 	"github.com/ghub/util"
 	"github.com/google/go-github/github"
 	"log"
+	//"github.com/olekukonko/tablewriter"
+	//"os"
 )
 
 func getRepo(c *cli.Context) {
@@ -19,7 +22,12 @@ func getRepo(c *cli.Context) {
 		log.Fatal(err)
 	}
 
-	util.PrintJson(*repo)
+	//util.PrintJson(*repo)
+	util.PrintTable(*repo)
+	m := structs.Map(repo)
+	for k, v := range m {
+		fmt.Printf("Key type: %T, Value type: %T", k, v)
+	}
 }
 
 func getRepoIssues(c *cli.Context) {
