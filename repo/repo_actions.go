@@ -3,13 +3,14 @@ package repo
 import (
 	"fmt"
 	"github.com/codegangsta/cli"
-	"github.com/fatih/structs"
+    "github.com/fatih/color"
+	//"github.com/fatih/structs"
 	"github.com/ghub/gh"
 	"github.com/ghub/util"
 	"github.com/google/go-github/github"
 	"log"
-	//"github.com/olekukonko/tablewriter"
-	//"os"
+	"github.com/olekukonko/tablewriter"
+	"os"
 )
 
 func getRepo(c *cli.Context) {
@@ -23,11 +24,27 @@ func getRepo(c *cli.Context) {
 	}
 
 	//util.PrintJson(*repo)
-	util.PrintTable(*repo)
-	m := structs.Map(repo)
-	for k, v := range m {
-		fmt.Printf("Key type: %T, Value type: %T", k, v)
-	}
+	//util.PrintTable(*repo)
+
+    data  := []string{*repo.Name, *repo.URL}
+    data2 := []string{"\033[32m My string \033[00m", *repo.CloneURL}
+    data3 := []string{*repo.DownloadsURL, *repo.KeysURL}
+
+    table := tablewriter.NewWriter(os.Stdout)
+    fmt.Println()
+	table.SetHeader([]string{"Repo", "Name"})
+    table.SetBorder(false)
+    table.Append(data)
+    table.Append(data2)
+    table.Append(data3)
+    color.Set(color.Bold, color.FgHiBlue)
+	table.Render()
+    color.Unset()
+    fmt.Println()
+	//m := structs.Map(repo)
+	//for k, v := range m {
+	//	fmt.Printf("Key type: %T, Value type: %T", k, v)
+	//}
 }
 
 func getRepoIssues(c *cli.Context) {

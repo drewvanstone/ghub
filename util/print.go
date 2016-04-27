@@ -17,9 +17,11 @@ func PrintJson(input ...interface{}) {
 
 func PrintTable(input ...interface{}) {
 	fmt.Printf("%T", input)
+    //fmt.Printf("%+v\n", input)
 	//m := structs.Map(*input)
 	//table := tablewriter.NewWriter(os.Stdout)
 	//table.SetHeader([]string{"Key", "Value"})
+    //table.Append(input.ID, input.Name)
 
 	//for k, v := range m {
 	//	fmt.Println(k, v)
