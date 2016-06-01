@@ -20,15 +20,26 @@ func getOrg(c *cli.Context) {
 
 func getOrgRepos(c *cli.Context) {
 	org := c.Args().First()
+
 	opts := &github.RepositoryListByOrgOptions{
 		ListOptions: github.ListOptions{PerPage: 30},
 	}
-	repos, _, err := gh.Client.Repositories.ListByOrg(org, opts)
-	if err != nil {
-		fmt.Println(err)
+
+	var repositories []github.Repository
+	for {
+		repos, res, err := gh.Client.Repositories.ListByOrg(org, opts)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		repositories = append(repositories, repos...)
+		if res.NextPage == 0 {
+			break
+		}
+		opts.ListOptions.Page = res.NextPage
 	}
 
-	util.PrintJson(repos)
+	util.PrintJson(repositories)
 }
 
 func getOrgTeams(c *cli.Context) {
