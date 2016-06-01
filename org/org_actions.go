@@ -2,6 +2,10 @@ package org
 
 import (
 	"fmt"
+    "os"
+    "strconv"
+    //"text/tabwriter"
+    "github.com/olekukonko/tablewriter"
 	"github.com/codegangsta/cli"
 	"github.com/ghub/gh"
 	"github.com/ghub/util"
@@ -28,7 +32,34 @@ func getOrgRepos(c *cli.Context) {
 		fmt.Println(err)
 	}
 
-	util.PrintJson(repos)
+    table := tablewriter.NewWriter(os.Stdout)
+    table.SetHeader([]string{"NAME", "STARS", "FORKS", "SIZE"})
+
+    data := [][]string{}
+    for _, r := range repos {
+        d := []string{*r.Name, strconv.Itoa(*r.StargazersCount), strconv.Itoa(*r.ForksCount), strconv.Itoa(*r.Size)}
+        data = append(data, d)
+    }
+
+    for _, v := range data {
+            table.Append(v)
+    }
+
+    table.Render()
+
+//    w := new(tabwriter.Writer)
+//    w.Init(os.Stdout, 15, 8, 1, '\t', 0)
+//    fmt.Fprintln(w, "NAME\tSTARS\tFORKS\tSIZE")
+//    for _, r := range repos {
+//        n := *r.Name
+//        if len(n) > 10 {
+//            fmt.Fprintf(w, "%s\t%d\t%d\t%d\f", n[:10], *r.StargazersCount, *r.ForksCount, *r.Size)
+//        } else {
+//            fmt.Fprintf(w, "%s\t%d\t%d\t%d\f", n, *r.StargazersCount, *r.ForksCount, *r.Size)
+//        }
+//    }
+//    w.Flush()
+//	//util.PrintJson(repos)
 }
 
 func getOrgTeams(c *cli.Context) {
