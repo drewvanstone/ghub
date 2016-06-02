@@ -2,15 +2,24 @@ package org
 
 import (
 	"fmt"
-    "os"
-    "strconv"
-    //"text/tabwriter"
-    "github.com/olekukonko/tablewriter"
+	"sort"
+	//"github.com/fatih/color"
+	"os"
+	"strconv"
+	"strings"
+	//"text/tabwriter"
 	"github.com/codegangsta/cli"
 	"github.com/ghub/gh"
 	"github.com/ghub/util"
 	"github.com/google/go-github/github"
+	"github.com/olekukonko/tablewriter"
 )
+
+type repoRows [][]string
+
+func (r repoRows) Len() int           { return len(r) }
+func (r repoRows) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
+func (r repoRows) Less(i, j int) bool { return strings.Compare(r[i][0], r[j][0]) == -1 }
 
 func getOrg(c *cli.Context) {
 	org := c.Args().First()
@@ -27,39 +36,61 @@ func getOrgRepos(c *cli.Context) {
 	opts := &github.RepositoryListByOrgOptions{
 		ListOptions: github.ListOptions{PerPage: 30},
 	}
-	repos, _, err := gh.Client.Repositories.ListByOrg(org, opts)
-	if err != nil {
-		fmt.Println(err)
+
+	var repositories []github.Repository
+	for {
+		repos, res, err := gh.Client.Repositories.ListByOrg(org, opts)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		repositories = append(repositories, repos...)
+		if res.NextPage == 0 {
+			break
+		}
+		opts.ListOptions.Page = res.NextPage
 	}
 
-    table := tablewriter.NewWriter(os.Stdout)
-    table.SetHeader([]string{"NAME", "STARS", "FORKS", "SIZE"})
+	//grey := color.New(color.FgHiBlack).SprintFunc()
 
-    data := [][]string{}
-    for _, r := range repos {
-        d := []string{*r.Name, strconv.Itoa(*r.StargazersCount), strconv.Itoa(*r.ForksCount), strconv.Itoa(*r.Size)}
-        data = append(data, d)
-    }
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"NAME", "URL", "STARS", "FORKS", "SIZE", "PRIVATE", "CREATED"})
 
-    for _, v := range data {
-            table.Append(v)
-    }
+	repoRows := repoRows{}
+	for _, r := range repositories {
+		d := []string{
+			*r.Name,
+			*r.HTMLURL,
+			strconv.Itoa(*r.StargazersCount),
+			strconv.Itoa(*r.ForksCount),
+			strconv.Itoa(*r.Size),
+			strconv.FormatBool(*r.Private),
+			r.CreatedAt.String(),
+		}
+		repoRows = append(repoRows, d)
+	}
 
-    table.Render()
+	sort.Sort(repoRows)
 
-//    w := new(tabwriter.Writer)
-//    w.Init(os.Stdout, 15, 8, 1, '\t', 0)
-//    fmt.Fprintln(w, "NAME\tSTARS\tFORKS\tSIZE")
-//    for _, r := range repos {
-//        n := *r.Name
-//        if len(n) > 10 {
-//            fmt.Fprintf(w, "%s\t%d\t%d\t%d\f", n[:10], *r.StargazersCount, *r.ForksCount, *r.Size)
-//        } else {
-//            fmt.Fprintf(w, "%s\t%d\t%d\t%d\f", n, *r.StargazersCount, *r.ForksCount, *r.Size)
-//        }
-//    }
-//    w.Flush()
-//	//util.PrintJson(repos)
+	for _, v := range repoRows {
+		table.Append(v)
+	}
+
+	table.Render()
+
+	//    w := new(tabwriter.Writer)
+	//    w.Init(os.Stdout, 15, 8, 1, '\t', 0)
+	//    fmt.Fprintln(w, "NAME\tSTARS\tFORKS\tSIZE")
+	//    for _, r := range repos {
+	//        n := *r.Name
+	//        if len(n) > 10 {
+	//            fmt.Fprintf(w, "%s\t%d\t%d\t%d\f", n[:10], *r.StargazersCount, *r.ForksCount, *r.Size)
+	//        } else {
+	//            fmt.Fprintf(w, "%s\t%d\t%d\t%d\f", n, *r.StargazersCount, *r.ForksCount, *r.Size)
+	//        }
+	//    }
+	//    w.Flush()
+	//	//util.PrintJson(repos)
 }
 
 func getOrgTeams(c *cli.Context) {
