@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"sort"
 	//"github.com/fatih/color"
-	"os"
-	"strconv"
-	"strings"
-	//"text/tabwriter"
 	"github.com/codegangsta/cli"
 	"github.com/ghub/gh"
 	"github.com/ghub/util"
 	"github.com/google/go-github/github"
 	"github.com/olekukonko/tablewriter"
+	"os"
+	"strconv"
+	"strings"
+	//"text/tabwriter"
 )
 
 type repoRows [][]string
@@ -58,7 +58,7 @@ func getOrgRepos(c *cli.Context) {
 
 	repoRows := repoRows{}
 	for _, r := range repositories {
-		d := []string{
+		row := []string{
 			*r.Name,
 			*r.HTMLURL,
 			strconv.Itoa(*r.StargazersCount),
@@ -67,7 +67,7 @@ func getOrgRepos(c *cli.Context) {
 			strconv.FormatBool(*r.Private),
 			r.CreatedAt.String(),
 		}
-		repoRows = append(repoRows, d)
+		repoRows = append(repoRows, row)
 	}
 
 	sort.Sort(repoRows)
@@ -78,20 +78,34 @@ func getOrgRepos(c *cli.Context) {
 
 	table.Render()
 
-	//    w := new(tabwriter.Writer)
-	//    w.Init(os.Stdout, 15, 8, 1, '\t', 0)
-	//    fmt.Fprintln(w, "NAME\tSTARS\tFORKS\tSIZE")
-	//    for _, r := range repos {
-	//        n := *r.Name
-	//        if len(n) > 10 {
-	//            fmt.Fprintf(w, "%s\t%d\t%d\t%d\f", n[:10], *r.StargazersCount, *r.ForksCount, *r.Size)
-	//        } else {
-	//            fmt.Fprintf(w, "%s\t%d\t%d\t%d\f", n, *r.StargazersCount, *r.ForksCount, *r.Size)
-	//        }
-	//    }
-	//    w.Flush()
-	//	//util.PrintJson(repos)
+	// w := new(tabwriter.Writer)
+	// w.Init(os.Stdout, 15, 8, 1, '\t', 0)
+	// fmt.Fprintln(w, "NAME\tSTARS\tFORKS\tSIZE")
+	// for _, r := range repos {
+	// 	n := *r.Name
+	// 	if len(n) > 10 {
+	// 		fmt.Fprintf(w, "%s\t%d\t%d\t%d\f", n[:10], *r.StargazersCount, *r.ForksCount, *r.Size)
+	// 	} else {
+	// 		fmt.Fprintf(w, "%s\t%d\t%d\t%d\f", n, *r.StargazersCount, *r.ForksCount, *r.Size)
+	// 	}
+	// }
+	// w.Flush()
+	//util.PrintJson(repos)
 }
+
+//func getOrgTeams(c *cli.Context) {
+//	org := c.Args().First()
+//	opts := &github.ListOptions{PerPage: 30}
+//	teams, _, err := gh.Client.Organizations.ListTeams(org, opts)
+//	if err != nil {
+//		fmt.Println(err)
+//	}
+//	if len(teams) == 0 {
+//		fmt.Println("No teams found")
+//	}
+//
+//	util.PrintJson(teams)
+//}
 
 func getOrgTeams(c *cli.Context) {
 	org := c.Args().First()
@@ -104,7 +118,7 @@ func getOrgTeams(c *cli.Context) {
 		fmt.Println("No teams found")
 	}
 
-	util.PrintJson(teams)
+	//util.PrintJson(teams)
 }
 
 func getOrgMembers(c *cli.Context) {
